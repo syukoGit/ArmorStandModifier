@@ -24,11 +24,20 @@ public class Menu {
 
     private final PlayerEditor pe;
 
+    /**
+     * Constructor
+     * @param type type of menu
+     * @param pe PlayerEditor who must open the inventory
+     */
     public Menu(TypeMenu type, PlayerEditor pe) {
         this.type = type;
         this.pe = pe;
     }
 
+    /**
+     * Get the inventory to be displayed
+     * @return inventory to be displayed
+     */
     public Inventory getMenu() {
         switch (type) {
             default:
@@ -64,10 +73,18 @@ public class Menu {
         return menuInv;
     }
 
-    public static ItemStack createIcon(ItemStack icon, String path, String command){
+    /**
+     * Create a custom item for the inventory. The item can have a lore for execute specific command.
+     * The attributes, the potion effects and the enchants are hidden.
+     * @param icon item at custom then to be displayed
+     * @param displayName display name at set to item
+     * @param command command displayed in lore if the item should be execute
+     * @return custom item to be displayed
+     */
+    public static ItemStack createIcon(ItemStack icon, String displayName, String command){
         ItemMeta meta = icon.getItemMeta();
         assert meta != null;
-        meta.setDisplayName(ChatColor.RESET + path);
+        meta.setDisplayName(ChatColor.RESET + displayName);
         if(!command.equals("")) {
             ArrayList<String> loreList = new ArrayList<>();
             loreList.add("");
@@ -81,6 +98,10 @@ public class Menu {
         return icon;
     }
 
+    /**
+     * Create the content for the main inventory
+     * @return array contents all items for the inventory
+     */
     private ItemStack[] createGuiMenu() {
         ItemStack redGlass = createIcon(new ItemStack(Material.RED_STAINED_GLASS_PANE), "", "");
 
@@ -229,6 +250,10 @@ public class Menu {
                 null, null, null, null, fineAdj, coarseAdj, null, null, help };
     }
 
+    /**
+     * Create the content for the equipment menu
+     * @return array contents all items for the inventory
+     */
     private ItemStack[] createEquipmentMenu() {
         ItemStack blueGlass = createIcon(new ItemStack(Material.BLUE_STAINED_GLASS_PANE), "", "");
         ItemStack grayGlass = createIcon(new ItemStack(Material.GRAY_STAINED_GLASS_PANE), "", "");
@@ -375,6 +400,10 @@ public class Menu {
                 leftHandSlot, blueGlass, leftHand, grayGlass, grayGlass, yellowGlass, lockAddOffHand, lockChangeOffHand, lockRemoveOffHand };
     }
 
+    /**
+     * Create the content for the armorstand list
+     * @return array contents all items for the inventory
+     */
     private ItemStack[] createArmorStandListMenu() {
         ItemStack[] output = { null, null, null, null, null, null, null, null, null,
                 null, null, null, null, null, null, null, null, null,

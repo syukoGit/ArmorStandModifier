@@ -26,6 +26,9 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Class for the manager of the different event useful to the plugin
+ */
 public class EventListener implements Listener {
 
     private EulerAngle subEulerAngle(Axis axis, EulerAngle angle, int adj) {
@@ -60,6 +63,14 @@ public class EventListener implements Listener {
 		 EVENTS
 	*//////////////
 
+    /**
+     * Method called when the player interacts with an inventory.
+     * The different inventories used by plugin :
+     * - Armor Stand Editor Interface
+     * - Armor Stand Editor Equipment
+     * - Armor Stand List
+     * @param event event sent
+     */
     @EventHandler
     void onMenuListener(InventoryClickEvent event) {
         if(event.getView().getTitle().equals("Armor Stand Editor Interface")) {
@@ -170,6 +181,13 @@ public class EventListener implements Listener {
         }
     }
 
+    /**
+     * Method called when a entity damages by an other entity.
+     *
+     * The method detects if a player damages an entity with the tool
+     * and does the action to do.
+     * @param event event sent
+     */
     @EventHandler
     void onLeftClickOnArmorStand(EntityDamageByEntityEvent event) {
         if(event.getDamager() instanceof Player && event.getEntity() instanceof ArmorStand) {
@@ -346,18 +364,18 @@ public class EventListener implements Listener {
                                 HashMap<String, String> targetInfo = PlayerEditor.getArmorStandInfo(target);
 
                                 pe.sendMessage(ChatColor.GREEN + "Information sur l'armor stand");
-                                pe.sendMessageWithoutSuffix(align + ChatColor.YELLOW + "Nom" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("customName"));
-                                pe.sendMessageWithoutSuffix(align + ChatColor.YELLOW + "UUID" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("uuid"));
-                                pe.sendMessageWithoutSuffix(align + ChatColor.YELLOW + "Propriétaire" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("owner"));
-                                pe.sendMessageWithoutSuffix(align + ChatColor.YELLOW + "Coordonnées" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("location"));
-                                pe.sendMessageWithoutSuffix(align + ChatColor.YELLOW + "Rotation" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("rotation"));
-                                pe.sendMessageWithoutSuffix(align + ChatColor.YELLOW + "Bras visible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("showArms"));
-                                pe.sendMessageWithoutSuffix(align + ChatColor.YELLOW + "Plaque visible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("showPlate"));
-                                pe.sendMessageWithoutSuffix(align + ChatColor.YELLOW + "Taille" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("size"));
-                                pe.sendMessageWithoutSuffix(align + ChatColor.YELLOW + "Nom visible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("showName"));
-                                pe.sendMessageWithoutSuffix(align + ChatColor.YELLOW + "Invisible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("invisibility"));
-                                pe.sendMessageWithoutSuffix(align + ChatColor.YELLOW + "Invincible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("invulnerable"));
-                                pe.sendMessageWithoutSuffix(align + ChatColor.YELLOW + "Gravité" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("gravity"));
+                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Nom" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("customName"));
+                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "UUID" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("uuid"));
+                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Propriétaire" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("owner"));
+                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Coordonnées" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("location"));
+                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Rotation" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("rotation"));
+                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Bras visible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("showArms"));
+                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Plaque visible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("showPlate"));
+                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Taille" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("size"));
+                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Nom visible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("showName"));
+                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Invisible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("invisibility"));
+                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Invincible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("invulnerable"));
+                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Gravité" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("gravity"));
                             } else {
                                 pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
                             }
@@ -386,6 +404,13 @@ public class EventListener implements Listener {
         }
     }
 
+    /**
+     * Method called when a player interacts with an entity.
+     *
+     * The method detects if a player interacts with an entity with the tool
+     * and does the action to do.
+     * @param event event sent
+     */
     @EventHandler
     void onRightClickOnArmorStand(PlayerInteractAtEntityEvent event) {
         if(event.getRightClicked() instanceof ArmorStand) {
@@ -503,6 +528,13 @@ public class EventListener implements Listener {
         }
     }
 
+    /**
+     * Method called when a player interacts.
+     *
+     * The method detects if a player interacts on a block or air on air with the admin tool
+     * and does the action to do.
+     * @param event event sent
+     */
     @EventHandler
     void onRightClickWithAdminTool(PlayerInteractEvent event) {
         if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -525,6 +557,12 @@ public class EventListener implements Listener {
         }
     }
 
+    /**
+     * Method called when a player send a message (not command).
+     *
+     * The method detects if a player is going to rename an armorstand.
+     * @param event event sent
+     */
     @EventHandler
     void onRenameArmorStand(AsyncPlayerChatEvent event) {
         PlayerEditor pe = PlayerEditor.getPlayerByUUID(event.getPlayer().getUniqueId());
@@ -542,6 +580,12 @@ public class EventListener implements Listener {
         }
     }
 
+    /**
+     * Method called when an entity death.
+     *
+     * The method detects when an armorstand dies.
+     * @param event event sent
+     */
     @EventHandler
     void onArmorStandKilled(EntityDeathEvent event) {
         if (event.getEntity() instanceof ArmorStand) {
@@ -555,22 +599,26 @@ public class EventListener implements Listener {
         }
     }
 
+    /**
+     * Method called when a inventory is closed.
+     *
+     * The method is used for equips the armorstand when the "Armor Stand Editor Equipment" menu is closed.
+     * @param event event sent
+     */
     @EventHandler
     void onMenuClosed(InventoryCloseEvent event) {
         if (event.getView().getTitle().equals("Armor Stand Editor Equipment")) {
             PlayerEditor pe = PlayerEditor.getPlayerByUUID(event.getPlayer().getUniqueId());
             ArmorStand target = pe.getTarget();
 
-            if (target == null || target.getEquipment() == null) {
-                return;
+            if (target != null && target.getEquipment() != null) {
+                target.getEquipment().setHelmet(event.getInventory().getItem(2));
+                target.getEquipment().setChestplate(event.getInventory().getItem(11));
+                target.getEquipment().setLeggings(event.getInventory().getItem(20));
+                target.getEquipment().setBoots(event.getInventory().getItem(29));
+                target.getEquipment().setItemInMainHand(event.getInventory().getItem(38));
+                target.getEquipment().setItemInOffHand(event.getInventory().getItem(47));
             }
-
-            target.getEquipment().setHelmet(event.getInventory().getItem(2));
-            target.getEquipment().setChestplate(event.getInventory().getItem(11));
-            target.getEquipment().setLeggings(event.getInventory().getItem(20));
-            target.getEquipment().setBoots(event.getInventory().getItem(29));
-            target.getEquipment().setItemInMainHand(event.getInventory().getItem(38));
-            target.getEquipment().setItemInOffHand(event.getInventory().getItem(47));
         }
     }
 }

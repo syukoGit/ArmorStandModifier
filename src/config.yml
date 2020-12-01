@@ -1,12 +1,17 @@
+# Tool used by players for customize armorstands
 tool: STICK
+
+# Tool used for the administrator features
 adminTool: BLAZE_ROD
 
-nbMaxArmorstandPerPlayer: 20
+nbMaxArmorstandPerPlayer: 50
 
+# All adjustments possible. The numbers are a integers
 adjustment:
   fine: 5
   coarse: 15
 
+# All customisable messages that can be sent by plugin
 message:
   suffix: "§cArmorStand §f: "
   consolesuffix: "§2[§fASE§2] "

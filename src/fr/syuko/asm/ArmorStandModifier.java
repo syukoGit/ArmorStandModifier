@@ -12,12 +12,18 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Main class extends JavaPlugin
+ */
 public class ArmorStandModifier extends JavaPlugin {
 
     private static ArmorStandModifier instance;
     private Material tool;
     private Material adminTool;
 
+    /**
+     * Method called when the plugin is enabled
+     */
     @Override
     public void onEnable() {
         instance = this;
@@ -28,11 +34,18 @@ public class ArmorStandModifier extends JavaPlugin {
         consoleMessage(getConfig().getString("message.startMessage"));
     }
 
+    /**
+     * Method called when the plugin is disabled
+     */
     @Override
     public void onDisable() {
         consoleMessage(getConfig().getString("message.endMessage"));
     }
 
+    /**
+     * Method for reload the plugin's config.
+     * If the config don't exist then we save the default config.
+     */
     @Override
     public void reloadConfig() {
         boolean configExist = true;
@@ -62,6 +75,14 @@ public class ArmorStandModifier extends JavaPlugin {
         consoleMessage(getConfig().getString("message.reloadComplete"));
     }
 
+    /**
+     * Initialize the PlayerEditor list.
+     *
+     * In the plugin directory ArmorStandModifier/PlayerEditor/, each file is a armorstand list of a PlayerEditor.
+     *
+     * The file name is the Player's UUID.
+     * The file content is the list of armorstands belonging the player.
+     */
     private void getPlayerEditorList() {
         File directory = new File("plugins/ArmorStandModifier/PlayerEditor/");
         if (!directory.exists() && !directory.mkdir())
@@ -107,19 +128,38 @@ public class ArmorStandModifier extends JavaPlugin {
         }
     }
 
+    /**
+     * Get the material of the tool for customize armorstands.
+     * @return tool's material
+     */
     public Material getTool() {
         return tool;
     }
 
+    /**
+     * Get the material of the admin tool.
+     * @return admin tool's material
+     */
     public Material getAdminTool() {
         return adminTool;
     }
 
+    /**
+     * Send a message to the server console.
+     * The message will be prefixed by the string set in config file with "message.consoleprefix"
+     * @param message message to sent
+     */
     public static void consoleMessage(String message) {
         String str = getInstance().getConfig().getString("message.consoleprefix") + ChatColor.RESET + message;
         Bukkit.getConsoleSender().sendMessage(colorizeString(str));
     }
 
+    /**
+     * Colorize text for message or armorstand's name.
+     * Replace the colors' characters to the Minecraft Colors.
+     * @param str text to colorize
+     * @return colored text
+     */
     public static String colorizeString(String str) {
         return str.replaceAll("§0|&0", ChatColor.BLACK + "")
                 .replaceAll("§1|&1", ChatColor.DARK_BLUE + "")
@@ -145,6 +185,10 @@ public class ArmorStandModifier extends JavaPlugin {
                 .replaceAll("§r|&r", ChatColor.RESET + "");
     }
 
+    /**
+     * Static methode for get the instance of the JavaPlugin.
+     * @return the ArmorStandModifier instance
+     */
     public static ArmorStandModifier getInstance() {
         return instance;
     }
