@@ -1,0 +1,26 @@
+tool: STICK
+adminTool: BLAZE_ROD
+
+nbMaxArmorstandPerPlayer: 20
+
+adjustment:
+  fine: 5
+  coarse: 15
+
+message:
+  suffix: "§cArmorStand §f: "
+  consolesuffix: "§2[§fASE§2] "
+  nopermissions: "§7Vous n'avez pas la permission"
+  startMessage: "§aPlugin ArmorStandModifier opérationnel"
+  endMessage: "§cArrêt du plugin ArmorStandModifier"
+  unknowCommand: "§cCommande inconnue"
+  misuseCommand: "§cMauvaise utilisation de la commande"
+  noFoundPlayer: "§cJoueur introuvable"
+  noArmorStandToDisplay: "§7Aucun Armor stand à affciher !"
+  rename: "§eVeuillez écrire le nouveau nom de l'armor stand dans le tchat"
+  renameComplete: "§eVotre Armor stand a été renommé"
+  notOwn: "§cVous n'êtes pas propriétaire de cet Armor Stand Custom !"
+  newArmorstand: "§eVous êtes maintenant propriétaire de cet armor stand !"
+  tooMuchArmorstand: "§cVous avez trop d'armor stand custom. La limite est de "
+  armorstandBroken: "§eUn de vos armor stand custom a été détruit !"
+  reloadComplete: "§eReload complete"

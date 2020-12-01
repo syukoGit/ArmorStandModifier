@@ -1,0 +1,21 @@
+main: fr.syuko.asm.ArmorStandModifier
+
+name: ArmorStandModifier
+
+description: Minecraft Armor Stand Modifier
+
+author: SuperYUKO
+
+version: 1.0
+
+api-version: 1.16
+
+commands:
+  armorstandmodifier:
+    description: Command for open Armor Stand Modifier Menu
+    usage: "Usage: /<command> [gui|setAxe|plugin|setMode|setAdj|help|list]"
+    permission: asm.command.asm
+    aliases:
+      - armorstandmodifier
+      - asm
+    permission-message: "§cArmorStand §f: §7Vous n'avez pas la permission"
