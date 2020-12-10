@@ -1,14 +1,1 @@
-/out/production/ArmorStandModifier/fr/syuko/asm/ArmorStandModifier.class
-/out/artifacts/ArmorStandModifier/ArmorStandModifier.jar
-/out/artifacts/ArmorStandModifier/ArmorStandModifier-v1.0.1.jar
-/out/production/ArmorStandModifier/fr/syuko/asm/CommandManager.class
-/out/production/ArmorStandModifier/config.yml
-/out/production/ArmorStandModifier/fr/syuko/asm/EventListener$1.class
-/out/production/ArmorStandModifier/fr/syuko/asm/EventListener.class
-/out/production/ArmorStandModifier/fr/syuko/asm/Menu$1.class
-/out/production/ArmorStandModifier/fr/syuko/asm/Menu$TypeMenu.class
-/out/production/ArmorStandModifier/fr/syuko/asm/Menu.class
-/out/production/ArmorStandModifier/fr/syuko/asm/PlayerEditor$BodyPart.class
-/out/production/ArmorStandModifier/fr/syuko/asm/PlayerEditor$Mode.class
-/out/production/ArmorStandModifier/fr/syuko/asm/PlayerEditor.class
-/out/production/ArmorStandModifier/plugin.yml
+/out/*
