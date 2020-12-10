@@ -15,7 +15,59 @@ commands:
     description: Command for open Armor Stand Modifier Menu
     usage: "Usage: /<command> [gui|setAxe|plugin|setMode|setAdj|help|list]"
     permission: asm.command.asm
+    default: true
     aliases:
       - armorstandmodifier
       - asm
     permission-message: "§cArmorStand §f: §7Vous n'avez pas la permission"
+
+permissions:
+  asm.*:
+    description: Allow all permissions
+    default: op
+    children:
+      asm.admin.*: true
+      asm.player.*: true
+  asm.admin.*:
+    description: Allow all admin permissions
+    default: op
+    children:
+      asm.command.asm: true
+      asm.admin.reload: true
+      asm.admin.adminTool: true
+      asm.command.gui: true
+  asm.player.*:
+    description: Allow all player permissions
+    default: true
+    children:
+      asm.command.asm: true
+      asm.command.gui: true
+      asm.command.help: true
+      asm.command.list.me: true
+      asm.command.list.other: true
+      asm.axis.x: true
+      asm.axis.y: true
+      asm.axis.z: true
+      asm.adjustment.coarse: true
+      asm.adjustment.fine: true
+      asm.mode.bodypart.head: true
+      asm.mode.bodypart.leftarm: true
+      asm.mode.bodypart.rightarm: true
+      asm.mode.bodypart.leftleg: true
+      asm.mode.bodypart.rightleg: true
+      asm.mode.bodypart.chest: true
+      asm.mode.rename: true
+      asm.mode.rename.colorize: true
+      asm.mode.gravity: true
+      asm.mode.invulnerable: true
+      asm.mode.showarm: true
+      asm.mode.reset: true
+      asm.mode.equipment: true
+      asm.mode.invisibility: true
+      asm.mode.plate: true
+      asm.mode.size: true
+      asm.mode.movearmorstand: true
+      asm.mode.rotation: true
+      asm.mode.info: true
+      asm.mode.showname: true
+      asm.equipment.lock: true
