@@ -450,11 +450,11 @@ public class PlayerEditor {
 
     /**
      * Send a message to the player.
-     * The message will be prefixed by the string set in config file with "message.prefix"
+     * The message will be prefixed by the string set in config file with "message.suffix"
      * @param message message to sent
      */
     public void sendMessage(String message) {
-        message = ArmorStandModifier.getInstance().getConfig().getString("message.prefix") + message;
+        message = ArmorStandModifier.getInstance().getConfig().getString("message.suffix") + message;
         sendMessageWithoutPrefix(message);
     }
 

@@ -146,11 +146,11 @@ public class ArmorStandModifier extends JavaPlugin {
 
     /**
      * Send a message to the server console.
-     * The message will be prefixed by the string set in config file with "message.consoleprefix"
+     * The message will be prefixed by the string set in config file with "message.consolesuffix"
      * @param message message to sent
      */
     public static void consoleMessage(String message) {
-        String str = getInstance().getConfig().getString("message.consoleprefix") + ChatColor.RESET + message;
+        String str = getInstance().getConfig().getString("message.consolesuffix") + ChatColor.RESET + message;
         Bukkit.getConsoleSender().sendMessage(colorizeString(str));
     }
 
