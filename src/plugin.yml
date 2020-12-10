@@ -45,11 +45,14 @@ permissions:
       asm.command.help: true
       asm.command.list.me: true
       asm.command.list.other: true
-      asm.axis.x: true
-      asm.axis.y: true
-      asm.axis.z: true
-      asm.adjustment.coarse: true
-      asm.adjustment.fine: true
+      asm.mode.*: true
+      asm.adjustment.*: true
+      asm.axis.*: true
+      asm.equipment.lock: true
+  asm.mode.*:
+    description: Allow all modes
+    default: true
+    children:
       asm.mode.bodypart.head: true
       asm.mode.bodypart.leftarm: true
       asm.mode.bodypart.rightarm: true
@@ -70,4 +73,16 @@ permissions:
       asm.mode.rotation: true
       asm.mode.info: true
       asm.mode.showname: true
-      asm.equipment.lock: true
+  asm.axis.*:
+    description: Allow all axis
+    default: true
+    children:
+      asm.axis.x: true
+      asm.axis.y: true
+      asm.axis.z: true
+  asm.adjustement.*:
+    description: Allow all adjustment
+    default: true
+    children:
+      asm.adjustment.coarse: true
+      asm.adjustment.fine: true
