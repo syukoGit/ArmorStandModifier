@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="ArmorStandModifier">
-    <output-path>$PROJECT_DIR$/out/artifacts/ArmorStandModifier</output-path>
-    <root id="archive" name="ArmorStandModifier.jar">
-      <element id="module-output" name="ArmorStandModifier" />
-    </root>
-  </artifact>
-</component>
