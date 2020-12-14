@@ -121,13 +121,13 @@ public class Menu {
         if(pe.hasPermission("asm.axis.z"))
             axisZ = createIcon(new ItemStack(Material.BLUE_WOOL), "Axe Z", "setAxe Z");
         if(pe.hasPermission("asm.mode.rename"))
-            nameTag = createIcon(new ItemStack(Material.NAME_TAG), "Renomer l'armor stand", "setMode rename");
+            nameTag = createIcon(new ItemStack(Material.NAME_TAG), "Renommer l'armor stand", "setMode rename");
         if(pe.hasPermission("asm.mode.bodypart.head"))
             head = createIcon(new ItemStack(Material.PLAYER_HEAD), "Piloter la tête", "setMode head");
         if(pe.hasPermission("asm.mode.gravity"))
-            gravity = createIcon(new ItemStack(Material.FEATHER), "Activer/Desactiver la gravité", "setMode gravity");
+            gravity = createIcon(new ItemStack(Material.FEATHER), "Activer/Désactiver la gravité", "setMode gravity");
         if(pe.hasPermission("asm.mode.invulnerable"))
-            invulnerable = createIcon(new ItemStack(Material.GOLDEN_APPLE), "Activer/Desactiver l'invincibilité", "setMode invincibility");
+            invulnerable = createIcon(new ItemStack(Material.GOLDEN_APPLE), "Activer/Désactiver l'invincibilité", "setMode invincibility");
         if(pe.hasPermission("asm.mode.reset"))
             reset = createIcon(new ItemStack(Material.TRIPWIRE_HOOK), "Reset", "setMode reset");
         if(pe.hasPermission("asm.mode.bodypart.leftarm"))
@@ -139,19 +139,19 @@ public class Menu {
         if(pe.hasPermission("asm.mode.bodypart.rightarm"))
             rightArm = createIcon(new ItemStack(Material.STICK), "Piloter le bras droit", "setMode rightArm");
         if(pe.hasPermission("asm.mode.invisibility"))
-            invisibility = createIcon(new ItemStack(Material.POTION), "Activer/Desactiver l'invisibilité", "setMode invisibility");
+            invisibility = createIcon(new ItemStack(Material.POTION), "Activer/Désactiver l'invisibilité", "setMode invisibility");
         if(pe.hasPermission("asm.mode.showarm"))
-            showArm = createIcon(new ItemStack(Material.STICK), "Activer/Desactiver les bras", "setMode showArm");
+            showArm = createIcon(new ItemStack(Material.STICK), "Activer/Désactiver les bras", "setMode showArm");
         if(pe.hasPermission("asm.mode.bodypart.leftleg"))
             leftLeg = createIcon(new ItemStack(Material.STICK), "Piloter la jambe gauche", "setMode leftLeg");
         if(pe.hasPermission("asm.mode.plate"))
-            plate = createIcon(new ItemStack(Material.STONE_PRESSURE_PLATE), "Activer/Desactiver la plaque de stone", "setMode plate");
+            plate = createIcon(new ItemStack(Material.STONE_PRESSURE_PLATE), "Activer/Désactiver la plaque de stone", "setMode plate");
         if(pe.hasPermission("asm.mode.bodypart.rightleg"))
             rightLeg = createIcon(new ItemStack(Material.STICK), "Piloter la jambe droite", "setMode rightLeg");
         if(pe.hasPermission("asm.command.help"))
             help = createIcon(new ItemStack(Material.NETHER_STAR), "Besoin d'aide ?", "help");
         if(pe.hasPermission("asm.mode.movearmorstand"))
-            armorStand = createIcon(new ItemStack(Material.ARMOR_STAND), "Deplacer porte armure", "setMode armorstand");
+            armorStand = createIcon(new ItemStack(Material.ARMOR_STAND), "Déplacer le porte armure", "setMode armorstand");
         if(pe.hasPermission("asm.mode.rotation"))
             rotation = createIcon(new ItemStack(Material.MAGENTA_WOOL), "Tourner le porte armure", "setMode rotation");
         if(pe.hasPermission("asm.mode.size"))
@@ -416,20 +416,26 @@ public class Menu {
                 null, null, null, null, null, null, null, null, null,
                 null, null, null, null, null, null, null, null, null };
 
+        DecimalFormat f = new DecimalFormat();
+        f.setMaximumFractionDigits(2);
+
         for (int i = 0; i < pe.getArmorStands().size() && i < 53; i++) {
             ArmorStand armorStand = (ArmorStand) Bukkit.getEntity(pe.getArmorStands().get(i));
             if (armorStand != null) {
                 ItemStack item = new ItemStack(Material.ARMOR_STAND);
                 ItemMeta meta = item.getItemMeta();
                 assert meta != null;
-                meta.setDisplayName(ChatColor.RESET + pe.getArmorStands().get(i).toString());
+                if (armorStand.getCustomName() == null || armorStand.getCustomName().equals("")){
+                    meta.setDisplayName(ChatColor.RESET + "Pas de nom");
+                } else {
+                    meta.setDisplayName(ChatColor.RESET + armorStand.getCustomName());
+                }
                 ArrayList<String> loreList = new ArrayList<>();
                 loreList.add("");
-                loreList.add(ChatColor.GRAY + "X : " + armorStand.getLocation().getX());
-                loreList.add(ChatColor.GRAY + "Y : " + armorStand.getLocation().getY());
-                loreList.add(ChatColor.GRAY + "Z : " + armorStand.getLocation().getZ());
-                DecimalFormat f = new DecimalFormat();
-                f.setMaximumFractionDigits(2);
+                loreList.add(ChatColor.GRAY + "UUID : " + pe.getArmorStands().get(i).toString());
+                loreList.add(ChatColor.GRAY + "X : " + f.format(armorStand.getLocation().getX()));
+                loreList.add(ChatColor.GRAY + "Y : " + f.format(armorStand.getLocation().getY()));
+                loreList.add(ChatColor.GRAY + "Z : " + f.format(armorStand.getLocation().getZ()));
                 loreList.add(ChatColor.GRAY + "Distance : " + f.format(pe.getPlayer().getLocation().distance(armorStand.getLocation())));
                 meta.setLore(loreList);
                 meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
