@@ -26,8 +26,8 @@ permissions:
     description: Allow all permissions
     default: op
     children:
-      asm.admin.*: true
-      asm.player.*: true
+      asm.admin: true
+      asm.player: true
   asm.admin:
     description: Allow all admin permissions
     default: op

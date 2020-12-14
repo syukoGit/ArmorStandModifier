@@ -172,12 +172,18 @@ public class EventListener implements Listener {
                 event.setCancelled(true);
 
             ItemStack item = event.getCurrentItem();
-            if (item == null || item.getItemMeta() == null)
+            if (item == null || item.getItemMeta() == null || item.getType() == Material.GRAY_STAINED_GLASS_PANE)
                 return;
 
-            ArmorStand armorStand = (ArmorStand) Bukkit.getEntity(UUID.fromString(item.getItemMeta().getDisplayName()));
-            if (armorStand != null)
-                armorStand.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 200, 1));
+            try
+            {
+                String uuid = ChatColor.stripColor(Objects.requireNonNull(item.getItemMeta().getLore()).get(1).replace("UUID : ", ""));
+                ArmorStand armorStand = (ArmorStand) Bukkit.getEntity(UUID.fromString(uuid));
+
+                if (armorStand != null)
+                    armorStand.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 200, 1));
+            }
+            catch (Exception ignored) { }
         }
     }
 
@@ -312,6 +318,7 @@ public class EventListener implements Listener {
                             target.setSmall(false);
                             target.setVisible(true);
                             target.setCustomNameVisible(false);
+                            target.setCustomName(null);
                         } else {
                             pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
                         }
@@ -546,13 +553,13 @@ public class EventListener implements Listener {
     @EventHandler
     void onRightClickWithAdminTool(PlayerInteractEvent event) {
         if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (event.getPlayer().getInventory().getItemInMainHand().getType() == ArmorStandModifier.getInstance().getAdminTool()) {
+            if (event.getPlayer().getInventory().getItemInMainHand().getType() == ArmorStandModifier.getInstance().getAdminTool() && event.getPlayer().getGameMode() == GameMode.CREATIVE) {
                 PlayerEditor pe = PlayerEditor.getPlayerByUUID(event.getPlayer().getUniqueId());
                 if (pe.hasPermission("asm.admin.admintool")) {
                     Location loc = pe.getPlayer().getLocation();
                     if (loc.getWorld() != null) {
                         Collection<Entity> nearbyEntities = loc.getWorld().getNearbyEntities(loc, 50, 50, 50);
-                        pe.sendMessage("Nombre d'armorstands : " + nearbyEntities.size());
+                        pe.sendMessage(nearbyEntities.size() + " armor stands !");
                         for (Entity entity : nearbyEntities) {
                             if (entity instanceof ArmorStand) {
                                 ((ArmorStand)entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 400, 1));
