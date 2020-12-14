@@ -14,14 +14,14 @@ adjustment:
 # All customisable messages that can be sent by plugin
 message:
   suffix: "§cArmorStand §f: "
-  consolesuffix: "§2[§fASE§2] "
+  consolesuffix: "§2[§fASM§2] "
   nopermissions: "§7Vous n'avez pas la permission"
   startMessage: "§aPlugin ArmorStandModifier opérationnel"
   endMessage: "§cArrêt du plugin ArmorStandModifier"
   unknowCommand: "§cCommande inconnue"
   misuseCommand: "§cMauvaise utilisation de la commande"
   noFoundPlayer: "§cJoueur introuvable"
-  noArmorStandToDisplay: "§7Aucun Armor stand à affciher !"
+  noArmorStandToDisplay: "§7Aucun Armor stand à afficher !"
   rename: "§eVeuillez écrire le nouveau nom de l'armor stand dans le tchat"
   renameComplete: "§eVotre Armor stand a été renommé"
   notOwn: "§cVous n'êtes pas propriétaire de cet Armor Stand Custom !"

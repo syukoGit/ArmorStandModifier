@@ -29,7 +29,7 @@ public class PlayerEditor {
         Reset,
         BodyPart,
         Size,
-        ArmorStand,
+        MoveArmorStand,
         Rotation,
         Info,
         ShowName,
@@ -230,7 +230,7 @@ public class PlayerEditor {
 
             case "armorstand" :
                 if (hasPermission("asm.mode.movearmorstand")) {
-                    setMode(PlayerEditor.Mode.ArmorStand);
+                    setMode(PlayerEditor.Mode.MoveArmorStand);
                 } else {
                     sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
                 }

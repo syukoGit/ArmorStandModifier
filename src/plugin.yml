@@ -6,7 +6,7 @@ description: Minecraft Armor Stand Modifier
 
 author: SuperYUKO
 
-version: 1.0
+version: 1.0.101
 
 api-version: 1.16
 
@@ -28,7 +28,7 @@ permissions:
     children:
       asm.admin.*: true
       asm.player.*: true
-  asm.admin.*:
+  asm.admin:
     description: Allow all admin permissions
     default: op
     children:
@@ -36,9 +36,9 @@ permissions:
       asm.admin.reload: true
       asm.admin.adminTool: true
       asm.command.gui: true
-  asm.player.*:
+  asm.player:
     description: Allow all player permissions
-    default: true
+    default: op
     children:
       asm.command.asm: true
       asm.command.gui: true
@@ -51,7 +51,7 @@ permissions:
       asm.equipment.lock: true
   asm.mode.*:
     description: Allow all modes
-    default: true
+    default: op
     children:
       asm.mode.bodypart.head: true
       asm.mode.bodypart.leftarm: true
@@ -75,14 +75,14 @@ permissions:
       asm.mode.showname: true
   asm.axis.*:
     description: Allow all axis
-    default: true
+    default: op
     children:
       asm.axis.x: true
       asm.axis.y: true
       asm.axis.z: true
-  asm.adjustement.*:
+  asm.adjustment.*:
     description: Allow all adjustment
-    default: true
+    default: op
     children:
       asm.adjustment.coarse: true
       asm.adjustment.fine: true

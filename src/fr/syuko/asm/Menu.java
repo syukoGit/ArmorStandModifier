@@ -19,6 +19,10 @@ public class Menu {
         ArmorStandList
     }
 
+    private static String asmGuiTitle = "Armor Stand Modifier GUI";
+    private static String asmEquipmentTitle = "Armor Stand Modifier Equipment";
+    private static String asmListTitle = "Armor Stand List";
+
     private Inventory menuInv;
     private final TypeMenu type;
 
@@ -42,7 +46,7 @@ public class Menu {
         switch (type) {
             default:
             case GuiMenu:
-                menuInv = Bukkit.createInventory(null, 54, "Armor Stand Modifier Interface");
+                menuInv = Bukkit.createInventory(null, 54, Menu.asmGuiTitle);
                 menuInv.setContents(createGuiMenu());
                 break;
 
@@ -50,7 +54,7 @@ public class Menu {
                 if(this.pe.getTarget() == null || this.pe.getTarget().getEquipment() == null)
                     break;
 
-                menuInv = Bukkit.createInventory(null, 54, "Armor Stand Modifier Equipment");
+                menuInv = Bukkit.createInventory(null, 54, Menu.asmEquipmentTitle);
                 menuInv.setContents(createEquipmentMenu());
 
                 this.pe.getTarget().getEquipment().clear();
@@ -64,7 +68,7 @@ public class Menu {
                     break;
                 }
 
-                menuInv = Bukkit.createInventory(null, 54, "Armor Stand List");
+                menuInv = Bukkit.createInventory(null, 54, Menu.asmListTitle);
                 menuInv.setContents(createArmorStandListMenu());
 
                 break;
@@ -211,7 +215,7 @@ public class Menu {
             case Size:
                 size.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
                 break;
-            case ArmorStand:
+            case MoveArmorStand:
                 armorStand.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
                 break;
             case Rotation:
@@ -270,11 +274,11 @@ public class Menu {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         EntityEquipment asEquipment = pe.getTarget().getEquipment();
-        ItemStack helmet = null, chestplate = null, leggings = null, boots = null, rightHand = null, leftHand = null;
+        ItemStack helmet = null, chest = null, leggings = null, boots = null, rightHand = null, leftHand = null;
         if (asEquipment != null)
         {
             helmet = asEquipment.getHelmet();
-            chestplate = asEquipment.getChestplate();
+            chest = asEquipment.getChestplate();
             leggings = asEquipment.getLeggings();
             boots = asEquipment.getBoots();
             rightHand = asEquipment.getItemInMainHand();
@@ -290,7 +294,7 @@ public class Menu {
 
         ArmorStand as = pe.getTarget();
 
-        if (pe.hasPermission("asm.mode.equipment.lock")) {
+        if (pe.hasPermission("asm.equipment.lock")) {
             if (as.hasEquipmentLock(EquipmentSlot.HEAD, ArmorStand.LockType.ADDING))
                 lockAddHead = createIcon(new ItemStack(Material.RED_WOOL), "Ajouter équipement (Interdit)", "");
             else
@@ -393,7 +397,7 @@ public class Menu {
         }
 
         return new ItemStack[]{ helmetSlot, blueGlass, helmet, grayGlass, grayGlass, yellowGlass, lockAddHead, lockChangeHead, lockRemoveHead,
-                chestplateSlot, blueGlass, chestplate, grayGlass, grayGlass, yellowGlass, lockAddChest, lockChangeChest, lockRemoveChest,
+                chestplateSlot, blueGlass, chest, grayGlass, grayGlass, yellowGlass, lockAddChest, lockChangeChest, lockRemoveChest,
                 leggingsSlot, blueGlass, leggings, grayGlass, grayGlass, yellowGlass, lockAddLegs, lockChangeLegs, lockRemoveLegs,
                 bootsSlot, blueGlass, boots, grayGlass, grayGlass, yellowGlass, lockAddFeet, lockChangeFeet, lockRemoveFeet,
                 rightHandSlot, blueGlass, rightHand, grayGlass, grayGlass, yellowGlass, lockAddHand, lockChangeHand, lockRemoveHand,
@@ -438,5 +442,53 @@ public class Menu {
         }
 
         return output;
+    }
+
+    /**
+     * Get the Armor Stand Modifier GUI interface title
+     * @return ASM GUI title
+     */
+    public static String getAsmGuiTitle() {
+        return asmGuiTitle;
+    }
+
+    /**
+     * Set the Armor Stand Modifier GUI interface title
+     * @param asmGuiTitle new title
+     */
+    public static void setAsmGuiTitle(String asmGuiTitle) {
+        Menu.asmGuiTitle = asmGuiTitle;
+    }
+
+    /**
+     * Get the Armor Stand Modifier Equipment interface title
+     * @return ASM Equipment title
+     */
+    public static String getAsmEquipmentTitle() {
+        return asmEquipmentTitle;
+    }
+
+    /**
+     * Set the Armor Stand Modifier Equipment title
+     * @param asmEquipmentTitle new title
+     */
+    public static void setAsmEquipmentTitle(String asmEquipmentTitle) {
+        Menu.asmEquipmentTitle = asmEquipmentTitle;
+    }
+
+    /**
+     * Get the Armor Stand List interface title
+     * @return Armor Stand List title
+     */
+    public static String getAsmListTitle() {
+        return asmListTitle;
+    }
+
+    /**
+     * Set the Armor Stand List interface title
+     * @param asmListTitle new title
+     */
+    public static void setAsmListTitle(String asmListTitle) {
+        Menu.asmListTitle = asmListTitle;
     }
 }

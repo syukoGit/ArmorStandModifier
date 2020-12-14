@@ -90,7 +90,7 @@ public class ArmorStandModifier extends JavaPlugin {
 
         File[] fileList = directory.listFiles();
 
-        if (fileList == null)
+        if (fileList == null || fileList.length == 0)
             return;
 
         PlayerEditor.removeAllPlayer();
