@@ -195,6 +195,11 @@ public class EventListener implements Listener {
             ArmorStand target = (ArmorStand) event.getEntity();
             Material itemInMainHand = pe.getPlayer().getInventory().getItemInMainHand().getType();
 
+            if (pe.getPlayer().isSneaking() && itemInMainHand == ArmorStandModifier.getInstance().getTool()) {
+                event.setCancelled(true);
+                pe.getPlayer().performCommand("asm gui");
+            }
+
             if ((pe.isArmorStandOwner(target) || pe.hasPermission("asm.admin") || pe.getMode() == PlayerEditor.Mode.Info) && itemInMainHand == ArmorStandModifier.getInstance().getTool()) {
                 event.setCancelled(true);
 
