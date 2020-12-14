@@ -73,7 +73,7 @@ public class EventListener implements Listener {
      */
     @EventHandler
     void onMenuListener(InventoryClickEvent event) {
-        if(event.getView().getTitle().equals("Armor Stand Editor Interface")) {
+        if(event.getView().getTitle().equals(Menu.getAsmGuiTitle())) {
             if (event.isLeftClick() || event.isRightClick() || event.isShiftClick())
                 event.setCancelled(true);
             ItemStack item = event.getCurrentItem();
@@ -90,7 +90,7 @@ public class EventListener implements Listener {
             return;
         }
 
-        if(event.getView().getTitle().equals("Armor Stand Editor Equipment")) {
+        if(event.getView().getTitle().equals(Menu.getAsmEquipmentTitle())) {
             if(event.getRawSlot() >= 0 && event.getRawSlot() <= 53 && event.getRawSlot() != 2 && event.getRawSlot() != 11 && event.getRawSlot() != 20 &&
                     event.getRawSlot() != 29 && event.getRawSlot() != 38 && event.getRawSlot() != 47) {
                 event.setCancelled(true);
@@ -167,7 +167,7 @@ public class EventListener implements Listener {
             }
         }
 
-        if (event.getView().getTitle().equals("Armor Stand List")) {
+        if (event.getView().getTitle().equals(Menu.getAsmListTitle())) {
             if(event.isLeftClick() || event.isRightClick() || event.isShiftClick())
                 event.setCancelled(true);
 
@@ -193,201 +193,200 @@ public class EventListener implements Listener {
         if(event.getDamager() instanceof Player && event.getEntity() instanceof ArmorStand) {
             PlayerEditor pe = PlayerEditor.getPlayerByUUID(event.getDamager().getUniqueId());
             ArmorStand target = (ArmorStand) event.getEntity();
+            Material itemInMainHand = pe.getPlayer().getInventory().getItemInMainHand().getType();
 
-            if (pe.isArmorStandOwner(target) || pe.hasPermission("asm.admin") || pe.getMode() == PlayerEditor.Mode.Info) {
-                if (pe.getPlayer().getInventory().getItemInMainHand().getType() == ArmorStandModifier.getInstance().getTool() || pe.getMode() == PlayerEditor.Mode.Info) {
-                    event.setCancelled(true);
+            if ((pe.isArmorStandOwner(target) || pe.hasPermission("asm.admin") || pe.getMode() == PlayerEditor.Mode.Info) && itemInMainHand == ArmorStandModifier.getInstance().getTool()) {
+                event.setCancelled(true);
 
-                    pe.setTarget(target);
-                    switch (pe.getMode()) {
-                        case BodyPart:
-                            Axis axis = pe.getAxis();
-                            switch (pe.getBodyPart()) {
-                                case Chest:
-                                    if (pe.hasPermission("asm.mode.bodypart.chest")) {
-                                        target.setBodyPose(subEulerAngle(axis, target.getBodyPose(), pe.getAdjustment()));
-                                    } else {
-                                        pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                                    }
+                pe.setTarget(target);
+                switch (pe.getMode()) {
+                    case BodyPart:
+                        Axis axis = pe.getAxis();
+                        switch (pe.getBodyPart()) {
+                            case Chest:
+                                if (pe.hasPermission("asm.mode.bodypart.chest")) {
+                                    target.setBodyPose(subEulerAngle(axis, target.getBodyPose(), pe.getAdjustment()));
+                                } else {
+                                    pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                                }
+                                break;
+                            case Head:
+                                if (pe.hasPermission("asm.mode.bodypart.head")) {
+                                    target.setHeadPose(subEulerAngle(axis, target.getHeadPose(), pe.getAdjustment()));
+                                } else {
+                                    pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                                }
+                                break;
+                            case LeftArm:
+                                if (pe.hasPermission("asm.mode.bodypart.leftarm")) {
+                                    target.setLeftArmPose(subEulerAngle(axis, target.getLeftArmPose(), pe.getAdjustment()));
+                                } else {
+                                    pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                                }
+                                break;
+                            case LeftLeg:
+                                if (pe.hasPermission("asm.mode.bodypart.leftleg")) {
+                                    target.setLeftLegPose(subEulerAngle(axis, target.getLeftLegPose(), pe.getAdjustment()));
+                                } else {
+                                    pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                                }
+                                break;
+                            case RightArm:
+                                if (pe.hasPermission("asm.mode.bodypart.rightarm")) {
+                                    target.setRightArmPose(subEulerAngle(axis, target.getRightArmPose(), pe.getAdjustment()));
+                                } else {
+                                    pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                                }
+                                break;
+                            case RightLeg:
+                                if (pe.hasPermission("asm.mode.bodypart.rightleg")) {
+                                    target.setRightLegPose(subEulerAngle(axis, target.getRightLegPose(), pe.getAdjustment()));
+                                } else {
+                                    pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case Equipment:
+                        if (pe.hasPermission("asm.mode.equipment")) {
+                            Menu menuInv = new Menu(TypeMenu.EquipmentMenu, pe);
+                            pe.getPlayer().openInventory(menuInv.getMenu());
+                        } else {
+                            pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                        }
+                        break;
+                    case Gravity:
+                        if (pe.hasPermission("asm.mode.gravity")) {
+                            target.setGravity(!target.hasGravity());
+                        } else {
+                            pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                        }
+                        break;
+                    case Invulnerable:
+                        if (pe.hasPermission("asm.mode.invulnerable")) {
+                            target.setInvulnerable(!target.isInvulnerable());
+                        } else {
+                            pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                        }
+                        break;
+                    case Invisibility:
+                        if (pe.hasPermission("asm.mode.invisibility")) {
+                            target.setVisible(!target.isVisible());
+                        } else {
+                            pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                        }
+                        break;
+                    case Plate:
+                        if (pe.hasPermission("asm.mode.plate")) {
+                            target.setBasePlate(!target.hasBasePlate());
+                        } else {
+                            pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                        }
+                        break;
+                    case Rename:
+                        if (pe.hasPermission("asm.mode.rename")) {
+                            target.setCustomNameVisible(true);
+                            pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.rename"));
+                            pe.setRenameMode(true);
+                        } else {
+                            pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                        }
+                        break;
+                    case Reset:
+                        if (pe.hasPermission("asm.mode.reset")) {
+                            target.setHeadPose(new EulerAngle(0, 0, 0));
+                            target.setBodyPose(new EulerAngle(0, 0, 0));
+                            target.setLeftArmPose(new EulerAngle(0, 0, 0));
+                            target.setRightArmPose(new EulerAngle(0, 0, 0));
+                            target.setLeftLegPose(new EulerAngle(0, 0, 0));
+                            target.setRightLegPose(new EulerAngle(0, 0, 0));
+                            target.setRotation(0, 0);
+                            target.setSmall(false);
+                            target.setVisible(true);
+                            target.setCustomNameVisible(false);
+                        } else {
+                            pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                        }
+                        break;
+                    case ShowArm:
+                        if (pe.hasPermission("asm.mode.showarm")) {
+                            target.setArms(!target.hasArms());
+                        } else {
+                            pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                        }
+                        break;
+                    case MoveArmorStand:
+                        if (pe.hasPermission("asm.mode.movearmorstand")) {
+                            double adjustment = (pe.getAdjustment() == ArmorStandModifier.getInstance().getConfig().getInt("adjustment.coarse")) ? 0.5 : 0.1;
+                            Location loc = target.getLocation();
+                            switch (pe.getAxis()) {
+                                case X:
+                                    loc.setX(loc.getX() + adjustment);
+                                    target.teleport(loc);
                                     break;
-                                case Head:
-                                    if (pe.hasPermission("asm.mode.bodypart.head")) {
-                                        target.setHeadPose(subEulerAngle(axis, target.getHeadPose(), pe.getAdjustment()));
-                                    } else {
-                                        pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                                    }
+                                case Y:
+                                    loc.setY(loc.getY() + adjustment);
+                                    target.teleport(loc);
                                     break;
-                                case LeftArm:
-                                    if (pe.hasPermission("asm.mode.bodypart.leftarm")) {
-                                        target.setLeftArmPose(subEulerAngle(axis, target.getLeftArmPose(), pe.getAdjustment()));
-                                    } else {
-                                        pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                                    }
-                                    break;
-                                case LeftLeg:
-                                    if (pe.hasPermission("asm.mode.bodypart.leftleg")) {
-                                        target.setLeftLegPose(subEulerAngle(axis, target.getLeftLegPose(), pe.getAdjustment()));
-                                    } else {
-                                        pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                                    }
-                                    break;
-                                case RightArm:
-                                    if (pe.hasPermission("asm.mode.bodypart.rightarm")) {
-                                        target.setRightArmPose(subEulerAngle(axis, target.getRightArmPose(), pe.getAdjustment()));
-                                    } else {
-                                        pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                                    }
-                                    break;
-                                case RightLeg:
-                                    if (pe.hasPermission("asm.mode.bodypart.rightleg")) {
-                                        target.setRightLegPose(subEulerAngle(axis, target.getRightLegPose(), pe.getAdjustment()));
-                                    } else {
-                                        pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                                    }
+                                case Z:
+                                    loc.setZ(loc.getZ() + adjustment);
+                                    target.teleport(loc);
                                     break;
                                 default:
                                     break;
                             }
-                            break;
-                        case Equipment:
-                            if (pe.hasPermission("asm.mode.equipment")) {
-                                Menu menuInv = new Menu(TypeMenu.EquipmentMenu, pe);
-                                pe.getPlayer().openInventory(menuInv.getMenu());
-                            } else {
-                                pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                            }
-                            break;
-                        case Gravity:
-                            if (pe.hasPermission("asm.mode.gravity")) {
-                                target.setGravity(!target.hasGravity());
-                            } else {
-                                pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                            }
-                            break;
-                        case Invulnerable:
-                            if (pe.hasPermission("asm.mode.invulnerable")) {
-                                target.setInvulnerable(!target.isInvulnerable());
-                            } else {
-                                pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                            }
-                            break;
-                        case Invisibility:
-                            if (pe.hasPermission("asm.mode.invisibility")) {
-                                target.setVisible(!target.isVisible());
-                            } else {
-                                pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                            }
-                            break;
-                        case Plate:
-                            if (pe.hasPermission("asm.mode.plate")) {
-                                target.setBasePlate(!target.hasBasePlate());
-                            } else {
-                                pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                            }
-                            break;
-                        case Rename:
-                            if (pe.hasPermission("asm.mode.rename")) {
-                                target.setCustomNameVisible(true);
-                                pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.rename"));
-                                pe.setRenameMode(true);
-                            } else {
-                                pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                            }
-                            break;
-                        case Reset:
-                            if (pe.hasPermission("asm.mode.reset")) {
-                                target.setHeadPose(new EulerAngle(0, 0, 0));
-                                target.setBodyPose(new EulerAngle(0, 0, 0));
-                                target.setLeftArmPose(new EulerAngle(0, 0, 0));
-                                target.setRightArmPose(new EulerAngle(0, 0, 0));
-                                target.setLeftLegPose(new EulerAngle(0, 0, 0));
-                                target.setRightLegPose(new EulerAngle(0, 0, 0));
-                                target.setRotation(0, 0);
-                                target.setSmall(false);
-                                target.setVisible(true);
-                                target.setCustomNameVisible(false);
-                            } else {
-                                pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                            }
-                            break;
-                        case ShowArm:
-                            if (pe.hasPermission("asm.mode.showarm")) {
-                                target.setArms(!target.hasArms());
-                            } else {
-                                pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                            }
-                            break;
-                        case ArmorStand:
-                            if (pe.hasPermission("asm.mode.movearmorstand")) {
-                                double adjustment = (pe.getAdjustment() == 15) ? 0.5 : 0.1;
-                                Location loc = target.getLocation();
-                                switch (pe.getAxis()) {
-                                    case X:
-                                        loc.setX(loc.getX() + adjustment);
-                                        target.teleport(loc);
-                                        break;
-                                    case Y:
-                                        loc.setY(loc.getY() + adjustment);
-                                        target.teleport(loc);
-                                        break;
-                                    case Z:
-                                        loc.setZ(loc.getZ() + adjustment);
-                                        target.teleport(loc);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            } else {
-                                pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                            }
-                            break;
-                        case Size:
-                            if (pe.hasPermission("asm.mode.size")) {
-                                target.setSmall(!target.isSmall());
-                            } else {
-                                pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                            }
-                            break;
-                        case Rotation:
-                            if (pe.hasPermission("asm.mode.rotation")) {
-                                Location loc1 = target.getLocation();
-                                float yaw = loc1.getYaw();
-                                loc1.setYaw((yaw + 180 - (float) pe.getAdjustment()) % 360 - 180);
-                                target.teleport(loc1);
-                            } else {
-                                pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                            }
-                            break;
-                        case Info:
-                            if (pe.hasPermission("asm.mode.info")) {
-                                String align = "   ";
-                                HashMap<String, String> targetInfo = PlayerEditor.getArmorStandInfo(target);
+                        } else {
+                            pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                        }
+                        break;
+                    case Size:
+                        if (pe.hasPermission("asm.mode.size")) {
+                            target.setSmall(!target.isSmall());
+                        } else {
+                            pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                        }
+                        break;
+                    case Rotation:
+                        if (pe.hasPermission("asm.mode.rotation")) {
+                            Location loc1 = target.getLocation();
+                            float yaw = loc1.getYaw();
+                            loc1.setYaw((yaw + 180 - (float) pe.getAdjustment()) % 360 - 180);
+                            target.teleport(loc1);
+                        } else {
+                            pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                        }
+                        break;
+                    case Info:
+                        if (pe.hasPermission("asm.mode.info")) {
+                            String align = "   ";
+                            HashMap<String, String> targetInfo = PlayerEditor.getArmorStandInfo(target);
 
-                                pe.sendMessage(ChatColor.GREEN + "Information sur l'armor stand");
-                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Nom" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("customName"));
-                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "UUID" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("uuid"));
-                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Propriétaire" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("owner"));
-                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Coordonnées" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("location"));
-                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Rotation" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("rotation"));
-                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Bras visible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("showArms"));
-                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Plaque visible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("showPlate"));
-                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Taille" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("size"));
-                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Nom visible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("showName"));
-                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Invisible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("invisibility"));
-                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Invincible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("invulnerable"));
-                                pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Gravité" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("gravity"));
-                            } else {
-                                pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                            }
-                            break;
-                        case ShowName:
-                            if (pe.hasPermission("asm.mode.showname")) {
-                                target.setCustomNameVisible(!target.isCustomNameVisible());
-                            } else {
-                                pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                            }
-                            break;
-                    }
+                            pe.sendMessage(ChatColor.GREEN + "Information sur l'armor stand");
+                            pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Nom" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("customName"));
+                            pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "UUID" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("uuid"));
+                            pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Propriétaire" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("owner"));
+                            pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Coordonnées" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("location"));
+                            pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Rotation" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("rotation"));
+                            pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Bras visible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("showArms"));
+                            pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Plaque visible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("showPlate"));
+                            pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Taille" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("size"));
+                            pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Nom visible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("showName"));
+                            pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Invisible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("invisibility"));
+                            pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Invincible" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("invulnerable"));
+                            pe.sendMessageWithoutPrefix(align + ChatColor.YELLOW + "Gravité" + ChatColor.WHITE + ": " + ChatColor.GRAY + targetInfo.get("gravity"));
+                        } else {
+                            pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                        }
+                        break;
+                    case ShowName:
+                        if (pe.hasPermission("asm.mode.showname")) {
+                            target.setCustomNameVisible(!target.isCustomNameVisible());
+                        } else {
+                            pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                        }
+                        break;
                 }
             } else {
                 if (PlayerEditor.getArmorStandOwner(target) == null) {
@@ -398,7 +397,10 @@ public class EventListener implements Listener {
                         }
                     }
                 } else {
-                    pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.notOwn"));
+                    if (!pe.isArmorStandOwner(target)) {
+                        pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.notOwn"));
+                        event.setCancelled(true);
+                    }
                 }
             }
         }
@@ -417,100 +419,98 @@ public class EventListener implements Listener {
             ArmorStand target = (ArmorStand) event.getRightClicked();
             PlayerEditor pe = PlayerEditor.getPlayerByUUID(event.getPlayer().getUniqueId());
 
-            if (pe.isArmorStandOwner(target) || pe.hasPermission("asm.admin") || pe.getMode() == PlayerEditor.Mode.Info) {
-                if (pe.getPlayer().getInventory().getItemInMainHand().getType() == ArmorStandModifier.getInstance().getTool() || pe.getMode() == PlayerEditor.Mode.Info) {
-                    event.setCancelled(true);
+            if ((pe.isArmorStandOwner(target) || pe.hasPermission("asm.admin") || pe.getMode() == PlayerEditor.Mode.Info) && pe.getPlayer().getInventory().getItemInMainHand().getType() == ArmorStandModifier.getInstance().getTool() || pe.getMode() == PlayerEditor.Mode.Info) {
+                event.setCancelled(true);
 
-                    pe.setTarget(target);
-                    switch (pe.getMode()) {
-                        case BodyPart:
-                            Axis axis = pe.getAxis();
-                            switch (pe.getBodyPart()) {
-                                case Chest:
-                                    if (pe.hasPermission("asm.mode.bodypart.chest")) {
-                                        target.setBodyPose(addEulerAngle(axis, target.getBodyPose(), pe.getAdjustment()));
-                                    } else {
-                                        pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                                    }
+                pe.setTarget(target);
+                switch (pe.getMode()) {
+                    case BodyPart:
+                        Axis axis = pe.getAxis();
+                        switch (pe.getBodyPart()) {
+                            case Chest:
+                                if (pe.hasPermission("asm.mode.bodypart.chest")) {
+                                    target.setBodyPose(addEulerAngle(axis, target.getBodyPose(), pe.getAdjustment()));
+                                } else {
+                                    pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                                }
+                                break;
+                            case Head:
+                                if (pe.hasPermission("asm.mode.bodypart.head")) {
+                                    target.setHeadPose(addEulerAngle(axis, target.getHeadPose(), pe.getAdjustment()));
+                                } else {
+                                    pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                                }
+                                break;
+                            case LeftArm:
+                                if (pe.hasPermission("asm.mode.bodypart.leftarm")) {
+                                    target.setLeftArmPose(addEulerAngle(axis, target.getLeftArmPose(), pe.getAdjustment()));
+                                } else {
+                                    pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                                }
+                                break;
+                            case LeftLeg:
+                                if (pe.hasPermission("asm.mode.bodypart.leftleg")) {
+                                    target.setLeftLegPose(addEulerAngle(axis, target.getLeftLegPose(), pe.getAdjustment()));
+                                } else {
+                                    pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                                }
+                                break;
+                            case RightArm:
+                                if (pe.hasPermission("asm.mode.bodypart.rightarm")) {
+                                    target.setRightArmPose(addEulerAngle(axis, target.getRightArmPose(), pe.getAdjustment()));
+                                } else {
+                                    pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                                }
+                                break;
+                            case RightLeg:
+                                if (pe.hasPermission("asm.mode.bodypart.rightleg")) {
+                                    target.setRightLegPose(addEulerAngle(axis, target.getRightLegPose(), pe.getAdjustment()));
+                                } else {
+                                    pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                                }
+                                break;
+                            case None:
+                            default:
+                                break;
+                        }
+                        break;
+                    case Rotation:
+                        if (pe.hasPermission("asm.mode.rotation")) {
+                            Location loc1 = target.getLocation();
+                            float yaw = loc1.getYaw();
+                            loc1.setYaw((yaw - 180 + (float) pe.getAdjustment()) % 360 - 180);
+                            target.teleport(loc1);
+                        } else {
+                            pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                        }
+                        break;
+                    case MoveArmorStand:
+                        if (pe.hasPermission("asm.mode.movearmorstand")) {
+                            double adjustment = (pe.getAdjustment() == ArmorStandModifier.getInstance().getConfig().getInt("adjustment.coarse")) ? 0.5 : 0.1;
+                            Location loc = target.getLocation();
+                            switch (pe.getAxis()) {
+                                case X:
+                                    loc.setX(loc.getX() - adjustment);
+                                    target.teleport(loc);
                                     break;
-                                case Head:
-                                    if (pe.hasPermission("asm.mode.bodypart.head")) {
-                                        target.setHeadPose(addEulerAngle(axis, target.getHeadPose(), pe.getAdjustment()));
-                                    } else {
-                                        pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                                    }
+                                case Y:
+                                    loc.setY(loc.getY() - adjustment);
+                                    target.teleport(loc);
                                     break;
-                                case LeftArm:
-                                    if (pe.hasPermission("asm.mode.bodypart.leftarm")) {
-                                        target.setLeftArmPose(addEulerAngle(axis, target.getLeftArmPose(), pe.getAdjustment()));
-                                    } else {
-                                        pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                                    }
+                                case Z:
+                                    loc.setZ(loc.getZ() - adjustment);
+                                    target.teleport(loc);
                                     break;
-                                case LeftLeg:
-                                    if (pe.hasPermission("asm.mode.bodypart.leftleg")) {
-                                        target.setLeftLegPose(addEulerAngle(axis, target.getLeftLegPose(), pe.getAdjustment()));
-                                    } else {
-                                        pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                                    }
-                                    break;
-                                case RightArm:
-                                    if (pe.hasPermission("asm.mode.bodypart.rightarm")) {
-                                        target.setRightArmPose(addEulerAngle(axis, target.getRightArmPose(), pe.getAdjustment()));
-                                    } else {
-                                        pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                                    }
-                                    break;
-                                case RightLeg:
-                                    if (pe.hasPermission("asm.mode.bodypart.rightleg")) {
-                                        target.setRightLegPose(addEulerAngle(axis, target.getRightLegPose(), pe.getAdjustment()));
-                                    } else {
-                                        pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                                    }
-                                    break;
-                                case None:
                                 default:
                                     break;
                             }
-                            break;
-                        case Rotation:
-                            if (pe.hasPermission("asm.mode.rotation")) {
-                                Location loc1 = target.getLocation();
-                                float yaw = loc1.getYaw();
-                                loc1.setYaw((yaw - 180 + (float) pe.getAdjustment()) % 360 - 180);
-                                target.teleport(loc1);
-                            } else {
-                                pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                            }
-                            break;
-                        case ArmorStand:
-                            if (pe.hasPermission("asm.mode.movearmorstand")) {
-                                double adjustment = (pe.getAdjustment() == 15) ? 0.5 : 0.1;
-                                Location loc = target.getLocation();
-                                switch (pe.getAxis()) {
-                                    case X:
-                                        loc.setX(loc.getX() - adjustment);
-                                        target.teleport(loc);
-                                        break;
-                                    case Y:
-                                        loc.setY(loc.getY() - adjustment);
-                                        target.teleport(loc);
-                                        break;
-                                    case Z:
-                                        loc.setZ(loc.getZ() - adjustment);
-                                        target.teleport(loc);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            } else {
-                                pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
-                            }
-                            break;
-                        default:
-                            break;
+                        } else {
+                            pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                        }
+                        break;
+                    default:
+                        break;
 
-                    }
                 }
             } else {
                 if (PlayerEditor.getArmorStandOwner(target) == null) {
@@ -521,8 +521,10 @@ public class EventListener implements Listener {
                         }
                     }
                 } else {
-                    event.setCancelled(true);
-                    pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.notOwn"));
+                    if (!pe.isArmorStandOwner(target)) {
+                        pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.notOwn"));
+                        event.setCancelled(true);
+                    }
                 }
             }
         }
@@ -542,10 +544,9 @@ public class EventListener implements Listener {
                 PlayerEditor pe = PlayerEditor.getPlayerByUUID(event.getPlayer().getUniqueId());
                 if (pe.hasPermission("asm.admin.admintool")) {
                     Location loc = pe.getPlayer().getLocation();
-                    pe.sendMessage("Loc : " + loc.getX() + "/" + loc.getY() + "/" + loc.getZ());
                     if (loc.getWorld() != null) {
                         Collection<Entity> nearbyEntities = loc.getWorld().getNearbyEntities(loc, 50, 50, 50);
-                        pe.sendMessage(nearbyEntities.size() + "");
+                        pe.sendMessage("Nombre d'armorstands : " + nearbyEntities.size());
                         for (Entity entity : nearbyEntities) {
                             if (entity instanceof ArmorStand) {
                                 ((ArmorStand)entity).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 400, 1));
@@ -607,7 +608,7 @@ public class EventListener implements Listener {
      */
     @EventHandler
     void onMenuClosed(InventoryCloseEvent event) {
-        if (event.getView().getTitle().equals("Armor Stand Editor Equipment")) {
+        if (event.getView().getTitle().equals(Menu.getAsmEquipmentTitle())) {
             PlayerEditor pe = PlayerEditor.getPlayerByUUID(event.getPlayer().getUniqueId());
             ArmorStand target = pe.getTarget();
 
