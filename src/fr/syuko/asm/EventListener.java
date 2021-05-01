@@ -6,6 +6,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -71,7 +72,7 @@ public class EventListener implements Listener {
      * - Armor Stand List
      * @param event event sent
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     void onMenuListener(InventoryClickEvent event) {
         if(event.getView().getTitle().equals(Menu.getAsmGuiTitle())) {
             if (event.isLeftClick() || event.isRightClick() || event.isShiftClick())
@@ -619,7 +620,7 @@ public class EventListener implements Listener {
      * The method is used for equips the armorstand when the "Armor Stand Editor Equipment" menu is closed.
      * @param event event sent
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     void onMenuClosed(InventoryCloseEvent event) {
         if (event.getView().getTitle().equals(Menu.getAsmEquipmentTitle())) {
             PlayerEditor pe = PlayerEditor.getPlayerByUUID(event.getPlayer().getUniqueId());
