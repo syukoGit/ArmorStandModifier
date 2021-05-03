@@ -21,6 +21,7 @@ message:
   unknowCommand: "§cCommande inconnue"
   misuseCommand: "§cMauvaise utilisation de la commande"
   noFoundPlayer: "§cJoueur introuvable"
+  noFoundArmorStand: "§cArmor stand introuvable"
   noArmorStandToDisplay: "§7Aucun Armor stand à afficher !"
   rename: "§eVeuillez écrire le nouveau nom de l'armor stand dans le tchat"
   renameComplete: "§eVotre Armor stand a été renommé"
@@ -29,3 +30,5 @@ message:
   tooMuchArmorstand: "§cVous avez trop d'armor stand custom. La limite est de "
   armorstandBroken: "§eUn de vos armor stand custom a été détruit !"
   reloadComplete: "§eReload complete"
+  successfulTransfer: "§eLe transfert de l'armor stand s'est correctement déroulé"
+  failedTransfer: "§cLe transfert a échoué. Veuillez vérifier si le nouveau joueur peut avoir de nouveau armor stand!"

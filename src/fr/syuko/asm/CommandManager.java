@@ -7,9 +7,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 public class CommandManager implements CommandExecutor {
 
@@ -192,6 +195,51 @@ public class CommandManager implements CommandExecutor {
                 return true;
             }
 
+            if (arg[0].equalsIgnoreCase("transfer")) {
+                if (arg.length < 3) {
+                    pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.misuseCommand"));
+                    return true;
+                }
+
+                String uuidArmorStand = arg[1];
+                String pseudoNewOwner = arg[2];
+
+                ArmorStand armorStand = null;
+                try {
+                    armorStand = (ArmorStand) Bukkit.getEntity(UUID.fromString(uuidArmorStand));
+                }
+                catch (IllegalArgumentException ignored) {
+
+                }
+
+                if (armorStand != null) {
+                    if (pe.isArmorStandOwner(armorStand)) {
+                        Player player = Bukkit.getServer().getPlayer(pseudoNewOwner);
+
+                        if (player != null) {
+                            PlayerEditor newOwner = new PlayerEditor(player.getUniqueId());
+
+                            boolean successfulTransfer = newOwner.tryAddArmorStand(armorStand);
+
+                            if (successfulTransfer) {
+                                pe.removeArmorStand(armorStand);
+                                pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.successfulTransfer"));
+                            } else {
+                                pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.failedTransfer"));
+                            }
+                        } else {
+                            pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.noFoundPlayer"));
+                        }
+                    } else {
+                        pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.notOwn"));
+                    }
+                } else {
+                    pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.NoFoundArmorStand"));
+                }
+
+                return true;
+            }
+
             pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.unknowCommand"));
             return true;
         }
@@ -205,13 +253,14 @@ public class CommandManager implements CommandExecutor {
      * @param page page number
      */
     private void helpCommand(PlayerEditor pe, int page) {
-        int nbPageMax = 1;
+        int nbPageMax = 2;
 
         pe.sendMessageWithoutPrefix("");
         pe.sendMessageWithoutPrefix("");
         pe.sendMessage(ChatColor.YELLOW + "Help command" + ChatColor.GRAY + " | Page " + page);
         pe.sendMessageWithoutPrefix("");
         switch (page) {
+            default:
             case 1:
                 pe.sendMessageWithoutPrefix(ChatColor.YELLOW + "Ouvrir l'aide" + ChatColor.WHITE + ": " + ChatColor.GREEN + "/asm help " + ChatColor.GRAY + "[page]");
                 pe.sendMessageWithoutPrefix(ChatColor.YELLOW + "Ouvrir Gui" + ChatColor.WHITE + ": " + ChatColor.GREEN + "/asm gui");
@@ -221,6 +270,7 @@ public class CommandManager implements CommandExecutor {
                 pe.sendMessageWithoutPrefix(ChatColor.YELLOW + "Afficher liste d'armorstand" + ChatColor.WHITE + ": " + ChatColor.GREEN + "/asm list " + ChatColor.GRAY + "[pseudo]");
                 break;
             case 2:
+                pe.sendMessageWithoutPrefix(ChatColor.YELLOW + "Donner son armor stand à un autre joueur" + ChatColor.WHITE + ": " + ChatColor.GREEN + "/asm transfer " + ChatColor.DARK_GREEN + "<UUID de l'armor stand> <pseudo du joueur>");
                 break;
         }
 
