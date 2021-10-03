@@ -522,6 +522,12 @@ public class EventListener implements Listener {
                             pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
                         }
                         break;
+                    case Invulnerable:
+                        if (pe.hasPermission("asm.mode.invulnerable")) {
+                            target.setInvulnerable(!target.isInvulnerable());
+                        } else {
+                            pe.sendMessage(ArmorStandModifier.getInstance().getConfig().getString("message.nopermissions"));
+                        }
                     default:
                         break;
 
